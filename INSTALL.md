@@ -1,9 +1,11 @@
-# Development Install of the Gossip Hermes Fork on Ubuntu
+# Development Install of the Gossip Hermes Fork
 
 These instructions install the `feat/gossip-platform` branch from the
 `Soulthym/hermes-agent` fork for local development.
 
-## Prerequisites
+## Ubuntu
+
+### Prerequisites
 
 ```bash
 sudo apt update
@@ -17,14 +19,14 @@ already exist:
 curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 ```
 
-## Clone the fork
+### Clone the fork
 
 ```bash
 git clone --branch feat/gossip-platform https://github.com/Soulthym/hermes-agent.git
 cd hermes-agent
 ```
 
-## Install Hermes in editable mode
+### Install Hermes in editable mode
 
 Use the `uv` binary managed by Hermes, not a globally installed `uv`:
 
@@ -41,7 +43,7 @@ If your shell cannot find `hermes`, add the Hermes bin directory to `PATH`:
 export PATH="$HOME/.hermes/bin:$PATH"
 ```
 
-## Install the Gossip sidecar dependencies
+### Install the Gossip sidecar dependencies
 
 The Gossip integration uses the published npm package
 `@massalabs/gossip-sdk`.
@@ -50,7 +52,7 @@ The Gossip integration uses the published npm package
 npm --prefix plugins/platforms/gossip/sidecar install
 ```
 
-## Verify the development install
+### Verify the development install
 
 ```bash
 which hermes
@@ -58,6 +60,68 @@ hermes --help
 ```
 
 `which hermes` should resolve under `~/.hermes/bin`.
+
+## Windows
+
+These commands are intended for PowerShell.
+
+### Prerequisites
+
+Install Git if it is not already available:
+
+```powershell
+winget install --id Git.Git
+```
+
+Install Hermes once with the official Windows installer if
+`$env:LOCALAPPDATA\hermes\bin\uv.exe` does not already exist:
+
+```powershell
+iex (irm https://hermes-agent.nousresearch.com/install.ps1)
+```
+
+Restart PowerShell after the installer finishes.
+
+### Clone the fork
+
+```powershell
+git clone --branch feat/gossip-platform https://github.com/Soulthym/hermes-agent.git
+cd hermes-agent
+```
+
+### Install Hermes in editable mode
+
+Use the `uv.exe` binary managed by Hermes, not a globally installed `uv`:
+
+```powershell
+& "$env:LOCALAPPDATA\hermes\bin\uv.exe" pip install -e ".[all,dev]"
+```
+
+This keeps the `hermes` command wired to the editable checkout, so changes made
+in this repository are picked up without reinstalling the package.
+
+If PowerShell cannot find `hermes`, add the Hermes bin directory to `PATH` for
+the current session:
+
+```powershell
+$env:Path = "$env:LOCALAPPDATA\hermes\bin;$env:Path"
+```
+
+### Install the Gossip sidecar dependencies
+
+```powershell
+npm --prefix plugins/platforms/gossip/sidecar install
+```
+
+### Verify the development install
+
+```powershell
+Get-Command hermes
+hermes --help
+```
+
+`Get-Command hermes` should resolve under
+`$env:LOCALAPPDATA\hermes\bin`.
 
 ## Configure Gossip
 
